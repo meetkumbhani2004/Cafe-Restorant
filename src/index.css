@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Full height reset */
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+/* === PARALLAX HERO SECTION === */
+
+
+
+/* Force select dropdown to be black */
+select {
+  color: white !important;
+
+}
+
+select option {
+  background-color: black;
+  color: white;
+}

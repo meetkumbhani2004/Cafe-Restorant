@@ -1,0 +1,68 @@
+.hero-parallax {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Content scrolls ON TOP of hero */
+.scroll-overlay {
+  margin-top: -15vh; /* how much it overlaps hero */
+  position: relative;
+  z-index: 20;
+}
+
+/* Dark fade when page scrolls */
+.hero-parallax::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(0,0,0,0);
+  transition: background 0.4s ease;
+}
+
+body.scrolled .hero-parallax::after {
+  background: rgba(0,0,0,0.35);
+}
+
+/* === TEXT ANIMATIONS === */
+@keyframes slideUp {
+  from { transform: translateY(80px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.slide-up { animation: slideUp 1.2s ease forwards; }
+
+@keyframes slideFromRight {
+  from { transform: translateX(120px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.slide-right { animation: slideFromRight 1.2s ease forwards; }
+
+@keyframes fadeInText {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.text-fade { animation: fadeInText 1s ease forwards; }
+
+/* Replay fix */
+.replay { animation: none !important; }
+
+
+/* Swiper bullets */
+.swiper-pagination-bullet {
+  background: #999;
+  opacity: 1;
+  width: 10px;
+  height: 10px;
+  margin: 0 4px !important;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.swiper-pagination-bullet-active {
+  background: linear-gradient(45deg, #ffcc33, #ff0066); 
+  width: 13px;
+  height: 13px;
+}
