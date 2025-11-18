@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FaInstagram, FaFacebookF, FaTwitter } from "react-icons/fa";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 
 export default function Header() {
+  const location = useLocation();
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [scrolled, setScrolled] = useState(false);
@@ -22,6 +24,14 @@ export default function Header() {
     return () => window.removeEventListener("scroll", controlHeader);
   }, [lastScrollY]);
 
+  const navLinks = [
+    { path: "/", label: "Home" },
+    { path: "/about", label: "About" },
+    { path: "/menu", label: "Menu" },
+    { path: "/reservations", label: "Reservations" },
+    { path: "/contact", label: "Contact" },
+  ];
+
   return (
     <>
       {/* HEADER */}
@@ -33,7 +43,6 @@ export default function Header() {
         `}
       >
         <div className="container mx-auto flex items-center justify-between py-4 px-4">
-
           {/* MOBILE MENU BUTTON */}
           <button
             className="text-white text-3xl md:hidden"
@@ -43,17 +52,23 @@ export default function Header() {
           </button>
 
           {/* LOGO */}
-          <a href="/" className="text-3xl font-bold text-white">
+          <Link to="/" className="text-3xl font-bold text-white">
             MK
-          </a>
+          </Link>
 
           {/* DESKTOP NAVIGATION */}
           <nav className="hidden md:flex items-center gap-8 text-lg text-white">
-            <a href="/" className="hover:text-yellow-300   border-b-2 border-transparent hover:border-white transition-all duration-300">Home</a>
-            <a href="/about" className="hover:text-yellow-300 border-b-2 border-transparent hover:border-white transition-all duration-300">About</a>
-            <a href="/menu" className="hover:text-yellow-300 border-b-2 border-transparent hover:border-white transition-all duration-300">Menu</a>
-            <a href="/reservations" className="hover:text-yellow-300 border-b-2 border-transparent hover:border-white transition-all duration-300">Reservations</a>
-            <a href="/contact" className="hover:text-yellow-300 border-b-2 border-transparent hover:border-white transition-all duration-300">Contact</a>
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`border-b-2 border-transparent transition-all duration-300 hover:text-yellow-300 hover:border-white
+                  ${location.pathname === link.path ? "border-white" : ""}
+                `}
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
           {/* RIGHT SOCIAL ICONS (DESKTOP) */}
@@ -62,7 +77,6 @@ export default function Header() {
             <FaFacebookF />
             <FaTwitter />
           </div>
-         
 
           {/* SINGLE ICON (MOBILE RIGHT SIDE) */}
           <div className="md:hidden text-white text-xl">
@@ -88,11 +102,18 @@ export default function Header() {
         </button>
 
         {/* MOBILE LINKS */}
-        <a href="/" className="hover:text-yellow-300" onClick={() => setMobileMenu(false)}>Home</a>
-        <a href="/about" className="hover:text-yellow-300" onClick={() => setMobileMenu(false)}>About</a>
-        <a href="/menu" className="hover:text-yellow-300" onClick={() => setMobileMenu(false)}>Menu</a>
-        <a href="/reservations" className="hover:text-yellow-300" onClick={() => setMobileMenu(false)}>Reservations</a>
-        <a href="/contact" className="hover:text-yellow-300" onClick={() => setMobileMenu(false)}>Contact</a>
+        {navLinks.map((link) => (
+          <Link
+            key={link.path}
+            to={link.path}
+            onClick={() => setMobileMenu(false)}
+            className={`hover:text-yellow-300 border-b-2 border-transparent
+              ${location.pathname === link.path ? "border-white" : ""}
+            `}
+          >
+            {link.label}
+          </Link>
+        ))}
 
         <button className="mt-4 px-5 py-2 border border-white rounded-lg hover:bg-white hover:text-black transition">
           Book a table
