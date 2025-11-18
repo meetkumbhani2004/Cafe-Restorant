@@ -1,91 +1,65 @@
-import React, { useRef, useState, useEffect } from "react";
-import { FaCircle } from "react-icons/fa";
+import React from "react";
 
 const Specials = () => {
-  const ref = useRef();
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) setShow(true);
-    });
-
-    if (ref.current) obs.observe(ref.current);
-  }, []);
-
   return (
-    <>
-      <div
-        ref={ref}
-        className={`bg-black text-white py-20 px-40 transition-all duration-700 
-        ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
-      >
-        {/* Heading Section */}
-        <div className="text-center mb-16">
-          <p className="italic text-gray-300">This week's specials</p>
-          <h1 className="text-4xl md:text-6xl font-medium mt-3">We recommend</h1>
-          <p className="text-gray-300 max-w-2xl mx-auto mt-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit sed eiusmod tempor
-            incididunt ut labore etdo.
-          </p>
-        </div>
+    <div className="bg-black text-white py-16 px-6 md:px-20 lg:px-40">
+      
+      {/* Heading Section */}
+      <div className="text-center mb-14">
+        <p className="italic text-gray-300 text-sm md:text-base">
+          This week's specials
+        </p>
 
-        {/* Two Columns Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          {/* Left List */}
-          <div className="space-y-10 px-10">
-            {/* Item 1 */}
-            <div>
-              <div className="flex justify-between text-xl font-medium ">
-                <span>Coco Spice</span>
-                <div className="flex-1 border-b border-dotted mx-4 border-gray-600"></div>
-                <span>$19</span>
-              </div>
-              <p className=" mt-1">Captain Morgan spiced rum, pineapple</p>
-            </div>
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-medium mt-2 leading-tight">
+          We recommend
+        </h1>
 
-            {/* Item 2 */}
-            <div>
-              <div className="flex justify-between text-xl font-medium">
-                <span>Tequila Sunrise</span>
-                <div className="flex-1 border-b border-dotted mx-4 border-gray-600"></div>
-                <span>$14</span>
-              </div>
-              <p className=" mt-1">Tequila, orange juice, grenadine</p>
-            </div>
-
-            {/* Item 3 */}
-            <div>
-              <div className="flex justify-between text-xl font-medium">
-                <span>Cuba Libre</span>
-                <div className="flex-1 border-b border-dotted mx-4 border-gray-600"></div>
-                <span>$22</span>
-              </div>
-              <p className=" mt-1">Dark rum, fresh lime, Coke</p>
-            </div>
-
-            {/* Item 4 */}
-            <div>
-              <div className="flex justify-between text-xl font-medium">
-                <span>Cuba Libre</span>
-                <div className="flex-1 border-b border-dotted mx-4 border-gray-600"></div>
-                <span>$22</span>
-              </div>
-              <p className=" mt-1">Dark rum, fresh lime, Coke</p>
-            </div>
-          </div>
-
-          {/* Right Image */}
-          <div>
-            <img
-              src="third-frame.jpg"
-              className="w-full rounded shadow-lg"
-              alt="Cocktail"
-            />
-          </div>
-        </div>
+        <p className="text-gray-300 max-w-xl md:max-w-2xl mx-auto mt-4 text-sm md:text-base">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit sed eiusmod 
+          tempor incididunt ut labore etdo.
+        </p>
       </div>
-    </>
+
+      {/* Two Columns Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+
+        {/* Left List */}
+        <div className="space-y-8 md:space-y-10 px-2 md:px-6">
+
+          {[
+            { name: "Coco Spice", price: "$19", desc: "Captain Morgan spiced rum, pineapple" },
+            { name: "Tequila Sunrise", price: "$14", desc: "Tequila, orange juice, grenadine" },
+            { name: "Cuba Libre", price: "$22", desc: "Dark rum, fresh lime, Coke" },
+            { name: "Cuba Libre", price: "$22", desc: "Dark rum, fresh lime, Coke" }
+          ].map((item, i) => (
+            <div key={i}>
+              <div className="flex items-center text-lg md:text-xl font-medium">
+                <span className="whitespace-nowrap">{item.name}</span>
+
+                <div className="flex-1 border-b border-dotted mx-3 border-gray-600"></div>
+
+                <span className="whitespace-nowrap">{item.price}</span>
+              </div>
+
+              <p className="text-gray-300 text-sm md:text-base mt-1">
+                {item.desc}
+              </p>
+            </div>
+          ))}
+
+        </div>
+
+        {/* Right Image */}
+        <div className="w-full">
+          <img
+            src="third-frame.jpg"
+            className="w-full rounded-xl shadow-lg object-cover"
+            alt="Cocktail"
+          />
+        </div>
+
+      </div>
+    </div>
   );
 };
 

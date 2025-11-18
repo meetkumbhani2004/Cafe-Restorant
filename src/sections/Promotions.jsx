@@ -1,6 +1,6 @@
 import { MapPin } from 'lucide-react';
 
-export default function BridgeRestaurant() {
+export default function Promotions() {
   return (
     <div className="bg-black text-white">
       
