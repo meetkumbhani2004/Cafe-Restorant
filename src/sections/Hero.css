@@ -39,15 +39,28 @@ body.scrolled .hero-parallax::after {
   to { transform: translateX(0); opacity: 1; }
 }
 .slide-right { animation: slideFromRight 1.2s ease forwards; }
-
-@keyframes fadeInText {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* TEXT: bottom → up */
+.text-anim-bottom {
+  opacity: 0;
+  transform: translateY(50px);
+  animation: bottomToUp 1.2s ease forwards;
 }
-.text-fade { animation: fadeInText 1s ease forwards; }
 
-/* Replay fix */
-.replay { animation: none !important; }
+@keyframes bottomToUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.replay {
+  animation: none;
+}
+
 
 
 /* Swiper bullets */

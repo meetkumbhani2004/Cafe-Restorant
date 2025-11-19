@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -13,27 +13,50 @@ export default function HeroSlider() {
     { title: "Fresh handcrafted cocktails", subtitle: "A taste made for you", img: "bg2.jpg", anim: "bottom" },
     { title: "Flavours that excite", subtitle: "Let the night begin", img: "bg3.jpg", anim: "bottom" },
     { title: "Crafted with excellence", subtitle: "Taste the difference", img: "bg4.jpg", anim: "bottom" },
-    { title: "Evening just got better", subtitle: "Feel the vibe", img: "bg5.jpg", anim: "right" },
-    { title: "Where moments happen", subtitle: "Drink. Relax. Enjoy.", img: "bg6.jpg", anim: "right" },
+    { title: "Evening just got better", subtitle: "Feel the vibe", img: "bg5.jpg", anim: "bottom" },
+    { title: "Where moments happen", subtitle: "Drink. Relax. Enjoy.", img: "bg6.jpg", anim: "bottom" },
   ];
 
   // 👉 Mobile device me only 3 slides
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   if (isMobile) slides = slides.slice(0, 3);
 
-  const [offset, setOffset] = useState(0);
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [offset, setOffset] = useState(0);
+    const [showText, setShowText] = useState(false);
+    const sectionRef = useRef(null);
 
-  // PARALLAX SCROLL
-  useEffect(() => {
-    const handleScroll = () => {
-      setOffset(window.scrollY * 0.2); // smaller factor for subtle parallax
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    useEffect(() => {
+      const handleScroll = () => {
+        if (!sectionRef.current) return;
+        const rect = sectionRef.current.getBoundingClientRect();
+        const scrollTop = window.scrollY;
+        const sectionTop = rect.top + scrollTop;
+        const relativeY = scrollTop - sectionTop;
+        setOffset(relativeY * 0.3); // parallax speed factor
+      };
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+  
+    // IntersectionObserver for text reveal
+    useEffect(() => {
+      if (!sectionRef.current) return;
+      const observer = new IntersectionObserver(
+        ([entry]) => setShowText(entry.isIntersecting),
+        { threshold: 0.3 }
+      );
+      observer.observe(sectionRef.current);
+      return () => observer.disconnect();
+    }, []);
+
+    
 
   return (
-    <section className="relative h-screen overflow-hidden">
+    <section className="relative h-screen overflow-hidden"
+    ref={sectionRef}
+    >
+      
       <Swiper
         modules={[Navigation, Autoplay, EffectFade, Pagination]}
         navigation={{ enabled: !isMobile }}
@@ -48,19 +71,16 @@ export default function HeroSlider() {
             <div className="relative h-screen w-full">
 
               {/* Background with scroll-tied parallax */}
-              <div className="absolute inset-0 w-full h-full overflow-hidden">
-                <img
-                  src={slide.img}
-                  className={`w-full h-full object-cover opacity-0 scale-110 ${
-                    slide.anim === "bottom" ? "slide-up" : "slide-right"
-                  } delay-img`}
-                  style={{ transform: `translateY(${offset}px)` }} // <-- parallax effect
-                />
-              </div>
-
+              <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${slide.img})`,
+          transform: `translateY(${offset}px)`,
+        }}
+      ></div>
               {/* Text */}
               <div className="relative z-10 h-full flex flex-col justify-center items-center text-white text-center px-4">
-                <p className={`text-lg md:text-xl italic tracking-widest ${slide.anim === "bottom" ? "text-anim-bottom" : "text-anim-right"} delay-title`}>
+                <p className={`text-lg md:text-xl italic tracking-widest ${slide.anim === "bottom" ? "text-anim-bottom" : "text-anim-right"} delay-title`} >
                   {slide.title}
                 </p>
                 <h1 className={`text-4xl md:text-7xl font-serif mt-4 ${slide.anim === "bottom" ? "text-anim-bottom" : "text-anim-right"} delay-sub`}>
