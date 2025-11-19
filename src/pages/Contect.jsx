@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Clock, MapPin, Phone } from "lucide-react";
+import toast from "react-hot-toast";
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -14,11 +15,9 @@ const ContactPage = () => {
   const [show, setShow] = useState(false);
   const [offset, setOffset] = useState(0);
 
-  // PARALLAX SCROLL TIED TO SCROLL
+  // PARALLAX
   useEffect(() => {
-    const handleScroll = () => {
-      setOffset(window.scrollY * 0.3); // adjust speed factor
-    };
+    const handleScroll = () => setOffset(window.scrollY * 0.3);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -45,19 +44,18 @@ const ContactPage = () => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      toast.error("Please fill out all required fields");
       return;
     }
 
-    alert("Thank you for contacting us!");
+    toast.success("Thank you for contacting us!");
     setFormData({ message: "", name: "", email: "" });
   };
 
   return (
     <div className="w-full bg-white">
-
-      {/* ---------- HERO SECTION ---------- */}
+      {/* HERO */}
       <section className="relative w-full h-[80vh] md:h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* PARALLAX BACKGROUND */}
         <img
           src="/bg1.jpg"
           alt="contact"
@@ -65,10 +63,8 @@ const ContactPage = () => {
           style={{ transform: `translateY(${offset}px)` }}
         />
 
-        {/* OPTIONAL OVERLAY */}
         <div className="absolute inset-0 bg-black/30"></div>
 
-        {/* HERO TEXT */}
         <h1
           ref={textRef}
           className={`relative text-white text-4xl md:text-6xl tracking-wide transition-all duration-300 ${
@@ -79,22 +75,18 @@ const ContactPage = () => {
         </h1>
       </section>
 
-
-      {/* ---------- MAIN CONTACT SECTION ---------- */}
+      {/* MAIN CONTACT SECTION */}
       <div className="w-full bg-black py-16 px-6 md:px-20 lg:px-28">
         <div className="grid md:grid-cols-2 gap-14 lg:gap-20 max-w-7xl mx-auto">
-
-          {/* Left Side */}
+          
+          {/* LEFT SIDE */}
           <div className="space-y-8 text-white">
-
             <p className="text-sm tracking-widest italic">Contact us</p>
-
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif leading-tight">
               Get in touch
             </h1>
-
-            <p className="text-gray-300 text-lg leading-relaxed">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            <p className="text-gray-300 text-lg">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             </p>
 
             <div className="space-y-6 pt-4">
@@ -115,10 +107,10 @@ const ContactPage = () => {
             </div>
           </div>
 
-          {/* Right Side - Form */}
+          {/* RIGHT SIDE FORM */}
           <div className="space-y-6 text-white">
 
-            {/* Textarea */}
+            {/* Message */}
             <div>
               <textarea
                 name="message"
@@ -126,8 +118,7 @@ const ContactPage = () => {
                 rows="6"
                 onChange={handleChange}
                 placeholder="Your Message"
-                className={`w-full bg-transparent border px-6 py-4 
-                  transition-colors outline-none
+                className={`w-full bg-transparent border px-6 py-4 outline-none transition-colors
                   ${errors.message ? "border-red-500" : "border-[#828282] focus:border-white"}
                 `}
               />
@@ -144,8 +135,7 @@ const ContactPage = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Your Name"
-                className={`w-full bg-transparent border px-6 py-4 
-                  transition-colors outline-none
+                className={`w-full bg-transparent border px-6 py-4 outline-none transition-colors
                   ${errors.name ? "border-red-500" : "border-[#828282] focus:border-white"}
                 `}
               />
@@ -162,8 +152,7 @@ const ContactPage = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Your E-mail"
-                className={`w-full bg-transparent border px-6 py-4 
-                  transition-colors outline-none
+                className={`w-full bg-transparent border px-6 py-4 outline-none transition-colors
                   ${errors.email ? "border-red-500" : "border-[#828282] focus:border-white"}
                 `}
               />
@@ -183,11 +172,11 @@ const ContactPage = () => {
         </div>
       </div>
 
-      {/* ---------- GOOGLE MAP SECTION ---------- */}
+      {/* MAP */}
       <div className="w-full h-[350px] md:h-[450px]">
         <iframe
           title="google-map"
-          src="https://www.google.com/maps/embed?pb=!1m18..."
+         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1552.070254033463!2d72.89369464442747!3d21.2256051!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04fc031221a5f%3A0xc7c9f86cd0087785!2sCookEr&#39;s%20Eatery%20%7C%20best%20cafe%20in%20varachha!5e1!3m2!1sen!2sin!4v1763530424042!5m2!1sen!2sin"
           className="w-full h-full border-0"
           loading="lazy"
         ></iframe>

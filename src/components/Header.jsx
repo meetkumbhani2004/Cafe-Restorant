@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation,useNavigate } from "react-router-dom";
 import { FaInstagram, FaFacebookF, FaTwitter } from "react-icons/fa";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
+
 
 export default function Header() {
   const location = useLocation();
@@ -9,6 +10,7 @@ export default function Header() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
+  const navigate = useNavigate();
 
   // Hide Header On Scroll Down
   const controlHeader = () => {
@@ -42,47 +44,61 @@ export default function Header() {
           ${scrolled ? "md:bg-black/80 md:backdrop-blur-md" : "md:bg-transparent"}
         `}
       >
-        <div className="container mx-auto flex items-center justify-between py-4 px-4">
-          {/* MOBILE MENU BUTTON */}
-          <button
-            className="text-white text-3xl md:hidden"
-            onClick={() => setMobileMenu(true)}
-          >
-            <HiMenuAlt3 />
-          </button>
+      <header className="w-full pt-4"> 
+  {/* pt-4 = header upar se thoda niche aa jayega */}
 
-          {/* LOGO */}
-          <Link to="/" className="text-3xl font-bold text-white">
-            MK
-          </Link>
+  <div className="container mx-auto flex items-center justify-between py-4 px-4">
 
-          {/* DESKTOP NAVIGATION */}
-          <nav className="hidden md:flex items-center gap-8 text-lg text-white">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`border-b-2 border-transparent transition-all duration-300 hover:text-yellow-300 hover:border-white
-                  ${location.pathname === link.path ? "border-white" : ""}
-                `}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+    {/* MOBILE MENU BUTTON */}
+    <button
+      className="text-white text-3xl md:hidden"
+      onClick={() => setMobileMenu(true)}
+    >
+      <HiMenuAlt3 />
+    </button>
 
-          {/* RIGHT SOCIAL ICONS (DESKTOP) */}
-          <div className="hidden md:flex gap-4 text-white">
-            <FaInstagram />
-            <FaFacebookF />
-            <FaTwitter />
-          </div>
+    {/* LOGO */}
+    <Link to="/" className="text-3xl font-bold text-white">
+      MK
+    </Link>
 
-          {/* SINGLE ICON (MOBILE RIGHT SIDE) */}
-          <div className="md:hidden text-white text-xl">
-            <FaInstagram />
-          </div>
-        </div>
+    {/* DESKTOP NAVIGATION */}
+    <nav className="hidden md:flex items-center gap-8 text-lg text-white">
+      {navLinks.map((link) => (
+        <Link
+          key={link.path}
+          to={link.path}
+          className={`border-b-2 border-transparent transition-all duration-300 hover:text-yellow-300 hover:border-white
+            ${location.pathname === link.path ? "border-white" : ""}
+          `}
+        >
+          {link.label}
+        </Link>
+      ))}
+    </nav>
+
+    {/* RIGHT SOCIAL ICONS (DESKTOP) */}
+    <div className="hidden md:flex items-center gap-4 text-white">
+      <FaInstagram />
+      <FaFacebookF />
+      <FaTwitter />
+
+      <button
+  className="px-5 py-2 border border-white rounded-lg hover:bg-white hover:text-black transition"
+  onClick={() => navigate("/reservations")}
+>
+  Book a table
+</button>
+    </div>
+
+    {/* MOBILE RIGHT ICON */}
+    <div className="md:hidden text-white text-xl">
+      <FaInstagram />
+    </div>
+
+  </div>
+</header>
+
       </header>
 
       {/* MOBILE MENU DROPDOWN */}

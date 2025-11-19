@@ -7,6 +7,7 @@ import Contact from './pages/Contect.jsx'
 import Header from './components/Header.jsx'
 import Footer from './components/Footer'
 import About from './pages/About.jsx'
+import { Toaster } from 'react-hot-toast'
 
 export default function App() {
   return (
@@ -14,7 +15,9 @@ export default function App() {
       <Header />
 
       <div className="app-main">
+          <Toaster position="top-center" />
         <Routes>
+        
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/menu" element={<Menu />} />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Users, Calendar, Clock } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Reservation = () => {
   const [person, setPerson] = useState("1 Person");
@@ -8,10 +9,11 @@ const Reservation = () => {
 
   const handleBooking = () => {
     if (!date || !time) {
-      alert("Please select date and time");
+      toast.error("Please select date and time");
       return;
     }
-    alert(`Reservation confirmed for ${person} on ${date} at ${time}`);
+
+    toast.success(`Reservation confirmed for ${person} on ${date} at ${time}`);
   };
 
   return (
