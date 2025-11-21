@@ -1,34 +1,13 @@
-import React, { useRef, useState, useEffect } from "react";
+import React from "react";
 
 export default function Page() {
-  const ref = useRef();
-  const [overlap, setOverlap] = useState(false);
 
-  useEffect(() => {
-    const obs = new IntersectionObserver(([entry]) => {
-      // Jab page section screen me aaye → background niche chala jaye
-      if (entry.isIntersecting) {
-        setOverlap(true);
-      } 
-      // Jab page section screen se bahar ho → background upar aa jaye
-      else {
-        setOverlap(false);
-      }
-    });
-
-    if (ref.current) obs.observe(ref.current);
-  }, []);
 
   return (
     <div className="relative bg-black text-white">
-      {/* 🔴 PAGE SECTION (Jo upar chadhta hai) */}
       <section
-        ref={ref}
-        className={`min-h-screen pt-24 bg-black relative
-    
-        ${overlap ? "translate-y-0" : "translate-y-20 opacity-0"}
-        ${overlap ? "z-20" : "z-0"}  /* 👈 Jab visible ho tab upar aaye */
-      `}
+       
+        className="min-h-96 py-24 px-16 bg-black "
       >
 
         <div className="max-w-6xl mx-auto text-center">

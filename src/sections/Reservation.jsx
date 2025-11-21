@@ -29,7 +29,7 @@ const Reservation = () => {
           <div className="flex items-center gap-3">
             <Users className="w-5 h-5 text-white/70 group-hover:text-white" />
             <select
-              className="bg-transparent w-full outline-none cursor-pointer appearance-none text-white"
+              className="bg-transparent outline-none cursor-pointer appearance-none text-white w-full px-10"
               value={person}
               onChange={(e) => setPerson(e.target.value)}
             >

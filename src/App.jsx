@@ -8,6 +8,7 @@ import Header from './components/Header.jsx'
 import Footer from './components/Footer'
 import About from './pages/About.jsx'
 import { Toaster } from 'react-hot-toast'
+import ScrollToTopButton from './ScrollToTopButton.jsx'
 
 export default function App() {
   return (
@@ -25,7 +26,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </div>
-
+      <ScrollToTopButton />
       <Footer />
     </>
   );

@@ -41,7 +41,7 @@ export default function Header() {
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300
           ${showHeader ? "translate-y-0" : "-translate-y-full"}
           bg-black 
-          ${scrolled ? "md:bg-black/80 md:backdrop-blur-md" : "md:bg-transparent"}
+          ${scrolled ? "md:bg-transparent md:backdrop-blur-md" : "md:bg-transparent"}
         `}
       >
       <header className="w-full pt-4"> 
@@ -109,7 +109,7 @@ export default function Header() {
           ${mobileMenu ? "top-[65px] opacity-100" : "-top-full opacity-0"}
         `}
       >
-        {/* CLOSE BUTTON */}
+       
         <button
           className="absolute top-4 right-4 text-3xl"
           onClick={() => setMobileMenu(false)}
