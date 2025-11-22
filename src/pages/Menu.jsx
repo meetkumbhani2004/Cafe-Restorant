@@ -61,7 +61,7 @@ const Menu = () => {
       </section>
 
       {/* =========================== MENU SECTION =========================== */}
-      <section className="max-w-7xl mx-auto py-20 px-20">
+      <section className="max-w-7xl mx-auto py-20 px-14">
         <div className="text-center mb-14">
           <h5 className="p-2 uppercase tracking-widest">Our choice</h5>
           <h2 className="text-4xl font-bold">Cocktails</h2>
@@ -111,7 +111,7 @@ const Menu = () => {
       </section>
 
 
-      <section className="max-w-7xl mx-auto py-20 px-20">
+      <section className="max-w-7xl mx-auto py-20 px-14">
         <div className="text-center mb-14">
           <h5 className="p-2 uppercase tracking-widest">We recommend</h5>
           <h2 className="text-4xl font-bold">Wine selection</h2>
@@ -161,7 +161,7 @@ const Menu = () => {
       </section>
 
       
-<section className="max-w-7xl mx-auto py-20 px-20">
+<section className="max-w-7xl mx-auto py-20 px-14">
         <div className="text-center mb-14">
           <h5 className="p-2 uppercase tracking-widest">New arrivals</h5>
           <h2 className="text-4xl font-bold">Craft beer</h2>

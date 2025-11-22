@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 export default function HeroSlider() {
-  let baseSlides = [
+  const slides = [
     { titleSmall: "Exclusive drink service", titleBig: "Cocktail stage evenings", img: "bg7.jpg" },
     { titleSmall: "Fresh handcrafted cocktails", titleBig: "A taste made for you", img: "bg8.jpg" },
     { titleSmall: "Flavours that excite", titleBig: "Let the night begin", img: "bg1.jpg" },
@@ -10,35 +10,37 @@ export default function HeroSlider() {
     { titleSmall: "Where moments happen", titleBig: "Drink. Relax. Enjoy.", img: "bg3.jpg" },
   ];
 
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-  const slides = isMobile ? baseSlides.slice(0, 3) : baseSlides;
+  // Mobile: only 3 slides
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+  const finalSlides = isMobile ? slides.slice(0, 3) : slides;
 
   const [index, setIndex] = useState(0);
   const [offset, setOffset] = useState(0);
   const [showText, setShowText] = useState(false);
   const sectionRef = useRef(null);
 
-  // Parallax
+  // Parallax effect
   useEffect(() => {
     const handleScroll = () => {
       if (!sectionRef.current) return;
+
       const rect = sectionRef.current.getBoundingClientRect();
       const scrollTop = window.scrollY;
       const sectionTop = rect.top + scrollTop;
       const relativeY = scrollTop - sectionTop;
 
-      setOffset(relativeY * 0.2); // smoother
+      setOffset(relativeY * 0.3);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-      useEffect(() => {
+   useEffect(() => {
         if (!sectionRef.current) return;
         const observer = new IntersectionObserver(
           ([entry]) => setShowText(entry.isIntersecting),
-          { threshold: 0.2 }
+          { threshold: 0.3 }
         );
         observer.observe(sectionRef.current);
         return () => observer.disconnect();
@@ -47,70 +49,92 @@ export default function HeroSlider() {
   // Auto Slide
   useEffect(() => {
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % slides.length);
-    }, 4000);
+      setIndex((prev) => (prev === finalSlides.length - 1 ? 0 : prev + 1));
+    }, 5000);
+
     return () => clearInterval(timer);
-  }, []);
+  }, [finalSlides.length]);
+
+  // Slide direction logic
+// const getDirection = (i) => {
+//   const lastTwo = [finalSlides.length - 1, finalSlides.length - 2];
+//   return lastTwo.includes(i) ? "translate-x-full" : "-translate-x-10";
+// };
+
+const getDirection = () => "translate-x-10";
+
 
   return (
     <div
-      className="relative w-full h-[100vh] md:h-[100vh] overflow-hidden bg-black"
+      className="relative w-full h-[100vh] overflow-hidden bg-black"
       ref={sectionRef}
     >
-      {slides.map((slide, i) => (
-        <div
-          key={i}
-          className={`absolute inset-0 transition-all duration-700 ease-out
-            ${i === index ? "opacity-100 scale-100" : "opacity-0 scale-105"}
-          `}
-        >
-          {/* background image */}
-          <img
-            src={slide.img}
-            alt=""
-            className="w-full h-full object-cover"
-            style={{ transform: `translateY(${offset}px)` }}
-          />
+      {finalSlides.map((slide, i) => {
+        const direction = getDirection(i);
 
-          {/* overlay */}
-          <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center p-4">
-            <p
-              className={`text-white text-lg md:text-xl italic mb-3 transition-all duration-700
-                ${i === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
-              `}
+        return (
+          <div
+            key={i}
+            className={`absolute inset-0 transition-all duration-700 ease-out ${
+              i === index ? "opacity-100 translate-x-0" : `opacity-0 ${direction}`
+            }`}
+          >
+            {/* IMAGE WRAPPER */}
+            <div
+              className={`transition-all ease-out ${
+                i === index ? "translate-x-0 opacity-100" : getDirection(i)
+              }`}
             >
-              {slide.titleSmall}
-            </p>
+<div className="w-full h-[100vh] flex items-center justify-center bg-black">
+  <img
+    src={slide.img}
+    alt=""
+    className="w-full h-full object-cover object-center"
+    style={{ transform: `translateY(${offset}px)` }}
+  />
+</div>
 
-            <h2
-              className={`text-white text-4xl md:text-7xl font-serif transition-all duration-[900ms]
-                ${i === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
-              `}
-            >
-              {slide.titleBig}
-            </h2>
+            </div>
 
-            <button
-              className={`mt-6 px-8 py-2 border border-white text-white hover:bg-white hover:text-black 
-                transition-all duration-700
-                ${i === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
-              `}
-            >
-              View More
-            </button>
+            {/* TEXT CONTENT */}
+            <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center px-4">
+              <p
+                className={`text-white text-lg md:text-xl italic mb-3 transition-all duration-[1s] ease-out ${
+                  i === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"
+                }`}
+              >
+                {slide.titleSmall}
+              </p>
+
+              <h2
+                className={`text-white text-4xl md:text-6xl font-serif transition-all duration-[2s] ease-out ${
+                  i === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"
+                }`}
+              >
+                {slide.titleBig}
+              </h2>
+
+              <button
+                className={`mt-8 px-10 py-2 border border-white text-white hover:bg-white hover:text-black transition-all duration-[3s] ease-out ${
+                  i === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"
+                }`}
+              >
+                View More
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
-      {/* Dots */}
+      {/* DOTS */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-        {slides.map((_, i) => (
+        {finalSlides.map((_, i) => (
           <button
             key={i}
             onClick={() => setIndex(i)}
-            className={`w-3 h-3 rounded-full transition-all
-              ${i === index ? "bg-white scale-125" : "bg-white/50 hover:bg-white"}
-            `}
+            className={`w-3 h-3 rounded-full transition-all ${
+              i === index ? "bg-white scale-125" : "bg-white/50 hover:bg-white scale-100"
+            }`}
           />
         ))}
       </div>
