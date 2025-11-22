@@ -1,100 +1,139 @@
 import React, { useState, useEffect,useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/effect-fade";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { Navigation, Autoplay, EffectFade, Pagination } from "swiper/modules";
-import "./Hero.css";
 
 export default function HeroSlider() {
-  let slides = [
-    { title: "Exclusive drink service", subtitle: "Cocktail stage evenings", img: "bg1.jpg", anim: "bottom" },
-    { title: "Fresh handcrafted cocktails", subtitle: "A taste made for you", img: "bg2.jpg", anim: "bottom" },
-    { title: "Flavours that excite", subtitle: "Let the night begin", img: "bg3.jpg", anim: "bottom" },
-    { title: "Crafted with excellence", subtitle: "Taste the difference", img: "bg4.jpg", anim: "bottom" },
-    { title: "Evening just got better", subtitle: "Feel the vibe", img: "bg5.jpg", anim: "bottom" },
-    { title: "Where moments happen", subtitle: "Drink. Relax. Enjoy.", img: "bg6.jpg", anim: "bottom" },
+  const slides = [
+        { titleSmall: "Exclusive drink service", titleBig: "Cocktail stage evenings", img: "bg7.jpg" },
+    { titleSmall: "Fresh handcrafted cocktails", titleBig: "A taste made for you", img: "bg8.jpg" },
+    { titleSmall: "Flavours that excite", titleBig: "Let the night begin", img: "bg1.jpg" },
+    { titleSmall: "Crafted with excellence", titleBig: "Taste the difference", img: "bg10.jpg" },
+    { titleSmall: "Evening just got better", titleBig: "Feel the vibe", img: "bg9.jpg" },
+    { titleSmall: "Where moments happen", titleBig: "Drink. Relax. Enjoy.", img: "bg3.jpg" },
+
+
   ];
 
-  // 👉 Mobile device me only 3 slides
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-  if (isMobile) slides = slides.slice(0, 3);
+  const [index, setIndex] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const sectionRef = useRef(null);
 
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const [offset, setOffset] = useState(0);
-    const [showText, setShowText] = useState(false);
-    const sectionRef = useRef(null);
 
-    useEffect(() => {
-      const handleScroll = () => {
-        if (!sectionRef.current) return;
-        const rect = sectionRef.current.getBoundingClientRect();
-        const scrollTop = window.scrollY;
-        const sectionTop = rect.top + scrollTop;
-        const relativeY = scrollTop - sectionTop;
-        setOffset(relativeY * 0.3); // parallax speed factor
-      };
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-  
-    // IntersectionObserver for text reveal
-    useEffect(() => {
-      if (!sectionRef.current) return;
-      const observer = new IntersectionObserver(
-        ([entry]) => setShowText(entry.isIntersecting),
-        { threshold: 0.3 }
-      );
-      observer.observe(sectionRef.current);
-      return () => observer.disconnect();
-    }, []);
-
+      useEffect(() => {
+        const handleScroll = () => {
+          if (!sectionRef.current) return;
+          const rect = sectionRef.current.getBoundingClientRect();
+          const scrollTop = window.scrollY;
+          const sectionTop = rect.top + scrollTop;
+          const relativeY = scrollTop - sectionTop;
+          setOffset(relativeY * 0.3); // parallax speed factor
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+      }, []);
     
+      // IntersectionObserver for text reveal
+      useEffect(() => {
+        if (!sectionRef.current) return;
+        const observer = new IntersectionObserver(
+          ([entry]) => setShowText(entry.isIntersecting),
+          { threshold: 0.3 }
+        );
+        observer.observe(sectionRef.current);
+        return () => observer.disconnect();
+      }, []);
+
+
+  // Auto Slide
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // 👇 Direction Logic
+const getDirection = (i) => {
+  const lastTwo = [slides.length - 1, slides.length - 2];
+  return lastTwo.includes(i) ? "translate-x-full" : "-translate-x-10";
+};
+
 
   return (
-    <section className="relative h-screen overflow-hidden"
+    <div className="relative w-full h-[100vh] overflow-hidden bg-black"
     ref={sectionRef}
     >
-      
-      <Swiper
-        modules={[Navigation, Autoplay, EffectFade, Pagination]}
-        navigation={{ enabled: !isMobile }}
-        pagination={{ clickable: true }}
-        effect="fade"
-        autoplay={{ delay: 3500 }}
-        loop
-        className="h-full"
-      >
-        {slides.map((slide, index) => (
-          <SwiperSlide key={index}>
-            <div className="relative h-screen w-full">
+      {slides.map((slide, i) => {
+        const direction = getDirection(i);
 
-              {/* Background with scroll-tied parallax */}
-              <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${slide.img})`,
-          transform: `translateY(${offset}px)`,
-        }}
-      ></div>
-              {/* Text */}
-              <div className="relative z-10 h-full flex flex-col justify-center items-center text-white text-center px-4">
-                <p className={`text-lg md:text-xl italic tracking-widest ${slide.anim === "bottom" ? "text-anim-bottom" : "text-anim-right"} delay-title`} >
-                  {slide.title}
-                </p>
-                <h1 className={`text-4xl md:text-7xl font-serif mt-4 ${slide.anim === "bottom" ? "text-anim-bottom" : "text-anim-right"} delay-sub`}>
-                  {slide.subtitle}
-                </h1>
-                <button className={`mt-8 px-7 py-2 border border-white rounded-md text-lg hover:bg-white hover:text-black transition ${slide.anim === "bottom" ? "text-anim-bottom" : "text-anim-right"} delay-btn`}>
-                  View more
-                </button>
-              </div>
+        return (
+          <div
+            key={i}
+            className={`absolute inset-0 transition-all duration-700 ease-out
+              ${i === index ? "opacity-100 translate-x-0" : `opacity-0 ${direction}`}
+            `}
+          >
+            {/* <img src={slide.img} className="w-full h-full object-cover" /> */}
+            <div
+  className={`
+    transition-all
+    ease-out
+    ${i === index ? "translate-x-0 opacity-100" : getDirection(i)}
+  `}
+>
+<div className="w-full h-full flex items-center justify-center bg-black">
+  <img
+    src={slide.img}
+    alt=""
+    className="max-w-full max-h-full object-contain"
+    style={{ transform: `translateY(${offset}px)` }}
+  />
+</div>
+</div>
 
+
+            <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center">
+              <p
+  className={`
+    text-white text-xl italic mb-4
+    transition-all duration-[1s] ease-out
+    ${i === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"}
+  `}
+>
+  {slide.titleSmall}
+</p>
+
+
+              <h2
+                className={`text-white text-5xl md:text-7xl font-serif    transition-all duration-[2s] ease-out
+    ${i === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"}
+                `}
+              >
+                {slide.titleBig}
+              </h2>
+
+              <button
+                className={`mt-8 px-10 py-2 border border-white text-white hover:bg-white hover:text-black     transition-all duration-[4s] ease-out
+    ${i === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20 " }
+                `}
+              >
+                View More
+              </button>
             </div>
-          </SwiperSlide>
+          </div>
+        );
+      })}
+
+      {/* Dots */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setIndex(i)}
+            className={`w-3 h-3 rounded-full transition-all 
+              ${i === index ? "bg-white scale-125" : "bg-white/50 hover:bg-white scale-100"}
+            `}
+          />
         ))}
-      </Swiper>
-    </section>
+      </div>
+    </div>
   );
 }
